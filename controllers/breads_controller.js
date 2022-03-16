@@ -3,32 +3,31 @@ const breads = express.Router()
 const Bread = require('../models/bread.js')
 const Baker = require('../models/baker.js')
 
-// Display Bakers in Database
-breads.get('/new', (req, res) => {
-  Baker.find()
-      .then(foundBakers => {
-          res.render('new', {
-              bakers: foundBakers
-          })
-    })
-})
-
-// Index:
-breads.get('/', (req, res) => {
-  Baker.find()
-    .then(foundBakers => {
-      Bread.find()
-      .then(foundBreads => {
+breads.get('/', async (req, res) => {
+  const foundBakers = await Baker.find().lean()
+  const foundBreads = await Bread.find().limit(6).lean()
           res.render('index', {
               breads: foundBreads,
               bakers: foundBakers,
               title: 'Index Page'
-          })
+  })
+})
+    
+breads.get('/new', (req, res) => {
+    Baker.find()
+        .then(foundBakers => {
+            res.render('new', {
+                bakers: foundBakers
+            })
       })
-    })
 })
 
-// CREATE
+// New
+breads.get('/new', (req, res) => {
+  res.render('new')
+})
+
+// Create
 breads.post('/', (req, res) => {
   if (!req.body.image) {
     req.body.image = 'undefined'
@@ -42,17 +41,7 @@ breads.post('/', (req, res) => {
   res.redirect('/breads')
 })
 
-// new route
-breads.get('/new', (req, res) => {
-    Baker.find()
-        .then(foundBakers => {
-            res.render('new', {
-                bakers: foundBakers
-            })
-      })
-})
-
-// EDIT
+// Edit
 breads.get('/:id/edit', (req, res) => {
   Baker.find()
     .then(foundBakers => {
@@ -66,7 +55,7 @@ breads.get('/:id/edit', (req, res) => {
     })
 })
 
-// SHOW
+// Show
 breads.get('/:id', (req, res) => {
   Bread.findById(req.params.id)
       .populate('baker')
@@ -94,7 +83,7 @@ breads.put('/:id', (req, res) => {
     })
 })
 
-// Seed Route 
+// Seed data
 breads.get('/data/seed', (req, res) => {
   Bread.insertMany([
     {

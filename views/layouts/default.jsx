@@ -1,6 +1,6 @@
 const React = require('react')
 
-// Server-side rendering
+// Server side rendering
 function Default(html) {
   return (
     <html>

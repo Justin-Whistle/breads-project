@@ -19,12 +19,15 @@
   },
   "homepage": "https://github.com/Justin-Whistle/breads-project#readme",
   "dependencies": {
+    "dom": "0.0.3",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "express-react-views": "^0.11.0",
+    "method-override": "^3.0.0",
     "mongoose": "^6.2.4",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "nodemon": "^2.0.15",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
   },
   "devDependencies": {}
 }

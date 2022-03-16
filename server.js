@@ -1,5 +1,5 @@
-// DEPENDENCIES
 const express = require('express')
+const methodOverride = require('method-override')
 const mongoose = require('mongoose')
 
 // CONFIGURATION
@@ -10,10 +10,19 @@ mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopolo
 )
 const app = express()
 
+
+// MIDDLEWARE
+app.set('views', __dirname + '/views')
+app.set('view engine', 'jsx')
+app.engine('jsx', require('express-react-views').createEngine())
+app.use(express.static('public'))
+app.use(express.urlencoded({extended: true}))
+app.use(methodOverride('_method'))
+
 // ROUTES
 app.get('/', (req, res) => {
-    res.send('Welcome to an Awesome App about Breads')
-  })
+    res.send('<h1>Welcome to an Awesome App about Breads<h1/>')
+})
   
 // breads
 const breadsController = require('./controllers/breads_controller.js')
@@ -23,17 +32,12 @@ app.use('/breads', breadsController)
 const bakersController = require('./controllers/bakers_controller.js')
 app.use('/bakers', bakersController)
 
-// 404 Page
+// 404 Endpoint
 app.get('*', (req, res) => {
-  res.render('404')
+    res.send('<h1>404 Page Not Found<h1/>')
 })
 
 // LISTEN
 app.listen(PORT, () => {
-  console.log('nomming at port', PORT);
+  console.log('Eating Bread at PORT', PORT);
 })
-
-// MIDDLEWARE
-app.set('views', __dirname + '/views')
-app.set('view engine', 'jsx')
-app.engine('jsx', require('express-react-views').createEngine())
